@@ -27,15 +27,7 @@ public class Background extends AppCompatActivity {
         setContentView(R.layout.background);
 
         btn_save = findViewById(R.id.btn_save);
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.putExtra(KEY, "color");
-                startActivity(intent);
-            }
-        });
-
+   
 
         btn_green = findViewById(R.id.btn_green);
         btn_blue = findViewById(R.id.btn_blue);
@@ -227,6 +219,24 @@ public class Background extends AppCompatActivity {
                 }, 850);
             }
         });
+
+
+
+     btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.putExtra("key-blue", "#codeblue");
+                intent.putExtra("key-black", "#codeblack");
+                intent.putExtra("key-orange", "#codeorange");
+                intent.putExtra("key-purple", "#codepurple");
+                intent.putExtra("key-green", "#codegreen");
+                startActivity(intent);
+            }
+        });
+
+
+
 
     }
 }
