@@ -1,0 +1,104 @@
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static android.provider.Contacts.SettingsColumns.KEY;
+
+public class MainActivity extends AppCompatActivity {
+
+    TextView timerText, touch_start_stop;
+    ConstraintLayout startStopTapped;
+    ImageView backgroundChange;
+    Timer timer;
+    TimerTask timerTask;
+    Double time = 0.0;
+    boolean timerStarted = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        timerText = findViewById(R.id.timerText);
+        startStopTapped = findViewById(R.id.startStopTapped);
+        touch_start_stop = findViewById(R.id.touch_start_stop);
+        timer = new Timer();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String strData = intent.getStringExtra(KEY);
+        }
+
+
+        backgroundChange = findViewById(R.id.backgroundChange);
+        backgroundChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Background.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    public void resetTapped (View view) {
+        if (timerTask !=null) {
+            timerTask.cancel();
+            time = 0.0;
+            timerStarted = false;
+            timerText.setText(formatTime( 0,0,0));
+        }
+    }
+
+    public void startStopTapped(View view) {
+        if(timerStarted == false) {
+            timerStarted = true;
+            touch_start_stop.setText("Tap to pause");
+            startTimer();
+        } else {
+            timerStarted = false;
+            touch_start_stop.setText("Tap to resume");
+            timerTask.cancel();
+        }
+    }
+
+    private void startTimer() {
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        time++;
+                        timerText.setText(getTimerText());
+                    }
+                });
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask, 1000, 1000);
+    }
+
+    private String getTimerText() {
+        int rounded = (int) Math.round(time);
+        int seconds = ((rounded % 86400) % 3600) % 60;
+        int minutes = ((rounded % 86400) % 3600) / 60;
+        int hours = ((rounded % 86400) / 3600);
+        return formatTime(seconds, minutes, hours);
+    }
+
+
+    @SuppressLint("DefaultLocale")
+    private  String formatTime(int seconds, int minutes, int hours) {
+        return  String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":"
+                + String.format("%02d", seconds);
+    }
+}
