@@ -35,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            String strData = intent.getStringExtra(KEY);
+            String bluecode = intent.getStringExtra(key-blue);
+            String orangecode = intent.getStringExtra(key-orange);
+            String blackcode = intent.getStringExtra(key-black);
+            String greencode = intent.getStringExtra(key-green);
+            String purplecode = intent.getStringExtra(key-purple);
         }
 
 
